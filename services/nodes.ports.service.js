@@ -1,8 +1,4 @@
 "use strict";
-
-const C = require("../constants");
-
-
 const DbService = require("db-mixin");
 const { MoleculerClientError } = require("moleculer").Errors;
 

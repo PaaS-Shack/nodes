@@ -1,9 +1,7 @@
 "use strict";
 const DbService = require("db-mixin");
 const ConfigLoader = require("config-mixin");
-
 const { MoleculerClientError } = require("moleculer").Errors;
-
 
 /**
  * Addons service
