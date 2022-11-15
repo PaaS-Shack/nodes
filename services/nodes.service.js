@@ -277,6 +277,35 @@ module.exports = {
 				);
 			}
 		},
+		writeCert: {
+			description: "Add members to the addon",
+			params: {
+				nodeID: { type: "string", optional: false },
+				domain: { type: "string", optional: false },
+
+				cert: { type: "string", optional: false },
+				key: { type: "string", optional: false },
+			},
+			async handler(ctx) {
+				const params = Object.assign({}, ctx.params);
+
+				const cert = await ctx.call('v1.certificates.resolveDomain', {
+					domain: params.domain
+				})
+
+				return Promise.allSettled([
+					ctx.call('v1.node.fs.writeFile', {
+						path: params.cert,
+						data: cert.cert
+					}, { nodeID: params.nodeID }),
+					ctx.call('v1.node.fs.writeFile', {
+						path: params.key,
+						data: cert.privkey
+					}, { nodeID: params.nodeID })
+				])
+
+			}
+		},
 
 		networks: {
 			rest: 'GET /networks',
@@ -386,7 +415,7 @@ module.exports = {
 
 
 
-					
+
 					ctx.emit('nodes.online', entity);
 				} else {
 					entity = await this.updateEntity(ctx, {
